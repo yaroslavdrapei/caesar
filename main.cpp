@@ -20,6 +20,13 @@ int main() {
  * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl main.obj /link'
 */
 
+/*
+ * gcc -c lib.cpp -o lib.obj
+ * gcc lib.obj -shared -o lib.dll
+ * gcc -c main.cpp -o main.obj
+ * gcc -o main main.obj -L. lib.dll
+*/
+
 // Static:
 
 /*
