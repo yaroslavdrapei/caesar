@@ -47,25 +47,22 @@ char unshift(char chr, int key) {
     return chr;
 }
 
-extern "C"
-{
-    __declspec(dllexport) char *encrypt(char *rawText, int key) {
-        char *result = (char *) calloc(strlen(rawText), sizeof(char));
+char *encrypt(char *rawText, int key) {
+    char *result = (char *) calloc(strlen(rawText), sizeof(char));
 
-        for (int i = 0; i < strlen(rawText); i++) {
-            result[i] = shift(rawText[i], key);
-        }
-
-        return result;
+    for (int i = 0; i < strlen(rawText); i++) {
+        result[i] = shift(rawText[i], key);
     }
 
-    __declspec(dllexport) char *decrypt(char *rawText, int key) {
-        char *result = (char *) calloc(strlen(rawText), sizeof(char));
+    return result;
+}
 
-        for (int i = 0; i < strlen(rawText); i++) {
-            result[i] = unshift(rawText[i], key);
-        }
+char *decrypt(char *rawText, int key) {
+    char *result = (char *) calloc(strlen(rawText), sizeof(char));
 
-        return result;
+    for (int i = 0; i < strlen(rawText); i++) {
+        result[i] = unshift(rawText[i], key);
     }
+
+    return result;
 }
