@@ -1,17 +1,32 @@
 #include <cstdio>
-#include <cstring>
-#include <cstdlib>
+#include <windows.h>
 
-char shift(char* chr, int key);
+typedef char*(*encrypt_t)(char*, int);
 
-char unshift(char* chr, int key);
-
-char* encrypt(char* rawText, int key);
-
-char* decrypt(char* rawText, int key);
+typedef char*(*decrypt_t)(char*, int);
 
 int main() {
-    char myText[] = "Roses are red, violets are blue";
+    HINSTANCE handle = LoadLibrary(TEXT("./lib.dll"));
+    if (handle == nullptr || handle == INVALID_HANDLE_VALUE){
+        printf("Lib not found\n");
+        return 1;
+    }
+
+    encrypt_t encrypt = (encrypt_t)GetProcAddress(handle, TEXT("encrypt"));
+
+    if (encrypt == nullptr) {
+        printf("Function not found!\n");
+        return -1;
+    }
+
+    decrypt_t decrypt = (decrypt_t)GetProcAddress(handle, TEXT("decrypt"));
+
+    if (decrypt == nullptr) {
+        printf("Function not found!\n");
+        return -1;
+    }
+
+    char myText[] = "Roses are yellow, violets are green!!!";
 
     char* result = encrypt(myText,1);
     printf("%s\n", result);
@@ -20,68 +35,11 @@ int main() {
     printf("%s\n", result2);
 }
 
-char shift(char chr, int key) {
-    key = key % 26;
-    int shifted;
+/*
+ * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /c /EHsc .\lib.cpp'
+ * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /LD .\lib.cpp'
+ * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /c /EHsc .\main.cpp'
+ * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl main.obj /link'
+*/
 
-    if ((int) chr > 96 && (int) chr < 123) {
-        shifted = ((int) chr + key);
-        if (shifted > 122) {
-            shifted = 96 + shifted % 122;
-        }
-        return (char) shifted;
-    }
 
-    if ((int) chr > 65 && (int) chr < 91) {
-        shifted = ((int) chr + key);
-        if (shifted > 90) {
-            shifted = 65 + shifted % 90;
-        }
-        return (char) shifted;
-    }
-
-    return chr;
-}
-
-char unshift(char chr, int key) {
-    key = key % 26;
-    int shifted;
-
-    if ((int) chr > 96 && (int) chr < 123) {
-        shifted = ((int) chr - key);
-        if (shifted < 96) {
-            shifted = 122 - (96 - shifted);
-        }
-        return (char) shifted;
-    }
-
-    if ((int) chr > 65 && (int) chr < 91) {
-        shifted = ((int) chr - key);
-        if (shifted < 65) {
-            shifted = 90 - (65 - shifted);
-        }
-        return (char) shifted;
-    }
-
-    return chr;
-}
-
-char* encrypt(char* rawText, int key) {
-    char* result = (char*)calloc(strlen(rawText), sizeof(char));
-
-    for (int i = 0; i < strlen(rawText); i++) {
-        result[i] = shift(rawText[i], key);
-    }
-
-    return result;
-}
-
-char* decrypt(char* rawText, int key) {
-    char* result = (char*)calloc(strlen(rawText), sizeof(char));
-
-    for (int i = 0; i < strlen(rawText); i++) {
-        result[i] = unshift(rawText[i], key);
-    }
-
-    return result;
-}
