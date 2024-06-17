@@ -37,7 +37,7 @@ int main() {
 
 /*
  * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /c /EHsc .\lib.cpp'
- * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /LD .\lib.cpp /link'
+ * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /LD .\lib.obj /link'
  * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl /c /EHsc .\main.cpp'
  * cmd /c '"D:\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" && cl main.obj /link'
 */
